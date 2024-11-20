@@ -9,17 +9,27 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
 
     private float timer;
-    void Update()
+    private bool spawnPaused = false;
+
+    private void Start()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        timer = spawnInterval;
+    }
+
+    private void Update()
+    {
+        if (!spawnPaused)
         {
-            SpawnObstacle();
-            timer = 0f;
+            timer += Time.deltaTime;
+            if (timer >= spawnInterval)
+            {
+                SpawnObstacle();
+                timer = 0f;
+            }
         }
     }
 
-    void SpawnObstacle()
+    private void SpawnObstacle()
     {
         GameObject pipe = pipePool.GetObject();
         if (pipe != null)
@@ -35,5 +45,8 @@ public class ObstacleManager : MonoBehaviour
 
         }
     }
+
+    public void SpawnStopped(bool cond) => spawnPaused = cond;
+
 
 }
