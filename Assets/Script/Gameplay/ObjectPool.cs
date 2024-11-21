@@ -1,41 +1,45 @@
 using System.Collections.Generic;
+using ProjectArduino.Utilities;
 using UnityEngine;
 
-public class ObjectPool : Singleton<ObjectPool>
+namespace ProjectArduino.Gameplay
 {
-    [SerializeField] private GameObject prefab;
-    [SerializeField] private int poolSize = 10;
-
-    private Queue<GameObject> pool = new Queue<GameObject>();
-
-    protected override void Awake()
+    public class ObjectPool : Singleton<ObjectPool>
     {
-        base.Awake();
-        for (int i = 0; i < poolSize; i++)
+        [SerializeField] private GameObject prefab;
+        [SerializeField] private int poolSize = 10;
+
+        private Queue<GameObject> pool = new Queue<GameObject>();
+
+        protected override void Awake()
         {
-            GameObject obj = Instantiate(prefab);
+            base.Awake();
+            for (int i = 0; i < poolSize; i++)
+            {
+                GameObject obj = Instantiate(prefab);
+                obj.SetActive(false);
+                pool.Enqueue(obj);
+            }
+        }
+
+        public GameObject GetObject()
+        {
+            if (pool.Count > 0)
+            {
+                GameObject obj = pool.Dequeue();
+                obj.SetActive(true);
+                return obj;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ReturnObject(GameObject obj)
+        {
             obj.SetActive(false);
             pool.Enqueue(obj);
         }
-    }
-
-    public GameObject GetObject()
-    {
-        if (pool.Count > 0)
-        {
-            GameObject obj = pool.Dequeue();
-            obj.SetActive(true);
-            return obj;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public void ReturnObject(GameObject obj)
-    {
-        obj.SetActive(false);
-        pool.Enqueue(obj);
     }
 }

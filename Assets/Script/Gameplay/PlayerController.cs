@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using ProjectArduino.Interface;
+using ProjectArduino.Managers;
 using UnityEngine;
 
-namespace ProjectArduino
+namespace ProjectArduino.Gameplay
 {
     public class PlayerController : MonoBehaviour
     {
@@ -21,14 +23,17 @@ namespace ProjectArduino
 
         private void Update()
         {
-            Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
-
-            if (mouseDelta.y > 0)
+            if (GameManager.Instance.CurrentGameState != GameManager.GameState.GAMEOVER)
             {
-                Jump();
-            }
+                Vector3 mouseDelta = Input.mousePosition - lastMousePosition;
 
-            lastMousePosition = Input.mousePosition;
+                if (mouseDelta.y > 0)
+                {
+                    Jump();
+                }
+
+                lastMousePosition = Input.mousePosition;
+            }
         }
 
         private void Jump()
@@ -43,12 +48,15 @@ namespace ProjectArduino
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-
+            if (other.transform.CompareTag("Obstacle"))
+            {
+                GameManager.Instance.ChangeGameState(GameManager.GameState.GAMEOVER);
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            ScoreManager.Instance.AddScore();
+            InterfaceManager.Instance.Score.AddScore();
         }
     }
 }

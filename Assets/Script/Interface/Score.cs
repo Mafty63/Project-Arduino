@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace ProjectArduino
+namespace ProjectArduino.Interface
 {
-    public class ScoreManager : Singleton<ScoreManager>
+    public class Score : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreText;
         private int currentScore;
@@ -15,5 +15,6 @@ namespace ProjectArduino
             currentScore += 1;
             scoreText.text = currentScore.ToString();
         }
+        public int GetScore() => currentScore;
     }
 }

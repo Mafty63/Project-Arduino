@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+namespace ProjectArduino.Gameplay
 {
-    private float moveSpeed;
-
-    public void SetSpeed(float speed) => moveSpeed = speed;
-
-    private void Update()
+    public class Obstacle : MonoBehaviour
     {
-        transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
+        private float moveSpeed;
 
-        if (transform.position.x <= -10f)
+        public void SetSpeed(float speed) => moveSpeed = speed;
+
+        private void Update()
         {
-            ObjectPool.Instance.ReturnObject(gameObject);
+            transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
+
+            if (transform.position.x <= -10f)
+            {
+                ObjectPool.Instance.ReturnObject(gameObject);
+            }
         }
     }
 }

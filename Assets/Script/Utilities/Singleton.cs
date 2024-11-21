@@ -1,18 +1,20 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+namespace ProjectArduino.Utilities
 {
-    public static T Instance { get; private set; }
-
-    protected virtual void Awake()
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        public static T Instance { get; private set; }
 
-        Instance = this as T;
+        protected virtual void Awake()
+        {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this as T;
+        }
     }
 }
-
