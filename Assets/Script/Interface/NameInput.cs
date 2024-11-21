@@ -10,11 +10,18 @@ namespace ProjectArduino.Interface
     public class NameInput : MonoBehaviour
     {
         [SerializeField] private TMP_InputField inputField;
-        [SerializeField] private Button confirmButton;
 
-        private void Start()
+        private void Update()
         {
-            confirmButton.onClick.AddListener(AddToLeaderBoard);
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                AddToLeaderBoard();
+            }
+        }
+
+        private void OnEnable()
+        {
+            inputField.Select();
         }
 
         private void AddToLeaderBoard()

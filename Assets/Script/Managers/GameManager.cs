@@ -10,6 +10,12 @@ namespace ProjectArduino.Managers
         [SerializeField] private ObstacleManager obstacleManager;
         public GameState CurrentGameState = GameState.GAMENOTSTARTED;
 
+        private void OnEnable()
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
         private void Start()
         {
             ChangeGameState(CurrentGameState);
