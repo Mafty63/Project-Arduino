@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using ProjectArduino.Interface;
 using ProjectArduino.Managers;
 using UnityEngine;
+using Uduino;
 
 namespace ProjectArduino.Gameplay
 {
     public class PlayerController : MonoBehaviour
     {
-        public float jumpForce = 5f;
-
+        public enum ControlType { Mouse_Delta, IMU_Delta }
+        [SerializeField] private ControlType controlType = ControlType.Mouse_Delta;
+        [SerializeField] private float jumpForce = 5f;
         [SerializeField] private Rigidbody2D rb;
         private Vector3 lastMousePosition;
 
@@ -18,7 +20,10 @@ namespace ProjectArduino.Gameplay
             if (GameManager.Instance.CurrentGameState == GameManager.GameState.GAMENOTSTARTED)
                 rb.bodyType = RigidbodyType2D.Static;
 
-            lastMousePosition = Input.mousePosition;
+            if (controlType == ControlType.Mouse_Delta)
+                lastMousePosition = Input.mousePosition;
+            else if (controlType == ControlType.IMU_Delta)
+                UduinoManager.Instance.OnDataReceived += OnDataReceived;
         }
 
         private void Update()
@@ -33,6 +38,17 @@ namespace ProjectArduino.Gameplay
                 }
 
                 lastMousePosition = Input.mousePosition;
+            }
+        }
+
+        private void OnDataReceived(string data, UduinoDevice device)
+        {
+            if (GameManager.Instance.CurrentGameState != GameManager.GameState.GAMEOVER)
+            {
+                if (data.Contains("Delta Y : "))
+                {
+                    Jump();
+                }
             }
         }
 
